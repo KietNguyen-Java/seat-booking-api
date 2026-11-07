@@ -1,0 +1,33 @@
+spring:
+  application:
+    name: seat-booking
+  # Default: in-memory H2 in PostgreSQL mode. LOCK_TIMEOUT lets concurrent requests wait for a
+  # row lock instead of failing after H2's 1 second default.
+  datasource:
+    url: jdbc:h2:mem:booking;MODE=PostgreSQL;DATABASE_TO_LOWER=TRUE;DB_CLOSE_DELAY=-1;LOCK_TIMEOUT=10000
+    username: sa
+    password: ""
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: none
+  flyway:
+    enabled: true
+
+booking:
+  hold-duration: PT5M          # ISO-8601 durations
+  expiry-check-interval: PT15S
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+
+---
+spring:
+  config:
+    activate:
+      on-profile: postgres
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/booking}
+    username: ${DB_USER:booking}
+    password: ${DB_PASSWORD:booking}
